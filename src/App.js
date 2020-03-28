@@ -2,27 +2,20 @@ import React, {useRef, useEffect} from 'react';
 import './App.css';
 import Button from "./components/Button";
 import {useDispatch, useSelector} from "react-redux";
-import { setInput, setPreviousNum, setCurrentNum, setOperator } from './actions/index';
+import { setInput, setPreviousNum, setCurrentNum, setOperator, setResult } from './actions/index';
 function App() {
     const dispatch = useDispatch();
     const input = useSelector(state => state.input);
     const previousNum = useSelector(state => state.previousNum);
     const currentNum = useSelector(state => state.currentNum);
     const operator = useSelector(state => state.operator);
+    const result = useSelector(state => state.result);
 
-    //const [input, setInput] = useState('');
-    //const [previousNum, setPrevious] = useState('');
-    //const [currentNum, setCurrent] = useState('');
-    //const [operator, setOperator] = useState('');
+    const outputTxtRef = useRef(null);
 
     function evaluate() {
-        //setCurrent(input)
         dispatch(setCurrentNum(input));
         console.log(previousNum+" : "+currentNum+" : "+operator);
-        if(operator === '/') {
-            //const result = Number(previousNum) / Number(currentNum);
-            //setInput(result);
-        }
     }
 
     const numberClick = (e) => {
@@ -31,21 +24,11 @@ function App() {
         }
         else
         {
-            //const newNum = input + e.target.id;
-            //setInput(newNum);
-            //dispatch({type:"SET_INPUT"});
-
-            //console.log('Number Clicked '+e.target.id);
             dispatch(setInput(e.target.id));
         }
     }
 
     const operatorClick = (e) => {
-        // setPrevious(input);
-        // setInput("");
-        // setOperator(e.target.id);
-
-        //console.log('Operator Clicked '+e.target.id);
         dispatch(setPreviousNum(input));
         dispatch(setOperator(e.target.id));
     }
@@ -65,22 +48,38 @@ function App() {
         return (<Button key={sign} onClick={numberClick} title={sign}></Button>)
     });
 
-    const outputTxtRef = useRef(null);
-
     useEffect(() => {
         outputTxtRef.current.innerText = input;
-        //console.log("useeffect: "+input);
     }, [input]);
 
     useEffect(() => {
         outputTxtRef.current.innerText = '';
-        console.log(previousNum+" : "+currentNum+" : "+operator);
     }, [operator]);
 
     useEffect(() => {
-        //outputTxtRef.current.innerText = '';
-        console.log(previousNum+" : "+currentNum+" : "+operator);
+        //console.log(previousNum+" : "+currentNum+" : "+operator);
+        if(operator === '/') {
+            const result = Number(previousNum) / Number(currentNum);
+            dispatch(setResult(result));
+        }
+        if(operator === '*') {
+            const result = Number(previousNum) * Number(currentNum);
+            dispatch(setResult(result));
+        }
+        if(operator === '-') {
+            const result = Number(previousNum) - Number(currentNum);
+            dispatch(setResult(result));
+        }
+        if(operator === '+') {
+            const result = Number(previousNum) + Number(currentNum);
+           dispatch(setResult(result));
+        }
     }, [currentNum]);
+
+    useEffect(() => {
+        outputTxtRef.current.innerText = result;
+        //console.log(previousNum+" : "+currentNum+" : "+operator+" : "+result);
+    }, [result]);
 
     return (
         <div className="App">

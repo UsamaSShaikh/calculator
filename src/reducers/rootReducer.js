@@ -1,26 +1,46 @@
 const initialState = {
-    counter: 0,
     input: '',
     previousNum: '',
     currentNum: '',
-    operator: ''
+    operator: '',
+    result: ''
 }
 
 function rootReducer(state = initialState, action) {
-    console.log('rootReducer');
     switch (action.type) {
         case 'SET_INPUT':
-            console.log('SET_INPUT: '+action.text);
-            return { input: state.input + action.text };
+            console.log('SET_INPUT: '+ action.payload);
+            return {
+                ...state,
+                input: state.input + action.payload 
+            };
         case 'SET_PREVIOUSNUM':
-            console.log('SET_PREVIOUSNUM: '+action.text);
-            return { previousNum: action.text };
+            console.log('SET_PREVIOUSNUM: '+action.payload);
+            return { 
+                ...state,
+                previousNum: action.payload
+            };
         case 'SET_CURRENTNUM':
-            console.log('SET_CURRENTNUM: '+action.text);
-            return { currentNum: action.text };
+            console.log('SET_CURRENTNUM: '+ action.payload , state);
+            return {
+                ...state,
+                currentNum: action.payload 
+            };
         case 'SET_OPERATOR':
-            console.log('SET_OPERATOR: '+action.text);
-            return { input: '', operator: action.text };
+            console.log('SET_OPERATOR: '+ action.payload, state);
+            return { 
+                ...state,
+                input: '',
+                operator: action.payload
+            };
+        case 'SET_RESULT':
+            console.log('SET_RESULT: '+ action.payload, state);
+            return {
+                ...state,
+                input: '',
+                operator: '',
+                result: action.payload
+            };
         default:
             return state;
     }
